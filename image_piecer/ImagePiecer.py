@@ -5,6 +5,9 @@ from pathlib import Path
 from .color_translation import colors_trans, rename_color
 from collections import OrderedDict
 
+
+unpresent_colors = set()
+
 class ImagePiecer:
     """piece style's pics in a Huger Pic"""
 
@@ -32,12 +35,16 @@ class ImagePiecer:
         self._output_path.mkdir(exist_ok=True)
         self._initialize_pics()
         self._piece()
-
+        if unpresent_colors:
+            print('存在字典没有的颜色，请检查。')
+            print(unpresent_colors)
     @staticmethod
     def _get_color_from_stem(stem):
-        stem = stem.replace('加单', "")
-        stem = stem.split(" ")[1]
-        stem = stem.lstrip("0123456789#")
+        stem = stem.replace('加单', "").replace("D", "").replace("A", "")
+        if " " in stem:
+            stem = stem.split(" ")[-1]
+        else:
+            print(f"stem is illegal!!!!!!!!!!\n{stem}\n\n\n\n\n\n")
         stem = rename_color(stem)
         return stem
 
@@ -47,6 +54,11 @@ class ImagePiecer:
         for color in colors_trans:
             if color in od.keys():
                 pics_path.append(od[color])
+
+        set_all_pics = set(self._pics_path)
+        set_present_pics = set(pics_path)
+        global unpresent_colors
+        unpresent_colors.update(set_all_pics - set_present_pics)
 
         self._pics_path = pics_path
         for pic_path in self._pics_path:
@@ -117,7 +129,7 @@ class ImagePiecer:
         tot_pcs = len(self._pics)
         if tot_pcs % 3 == 0 or tot_pcs % 5 == 0:
             col = 3
-        elif tot_pcs == 4:
+        elif tot_pcs in (1, 2, 4):
             col = 2
         else:
             col = 4
@@ -172,9 +184,11 @@ class ImagePiecer:
             raise Exception(f"plz input dataframe!!!")
 
         styles_dict = ImagePiecer.group_pics(input_pics_path)
-        [print(style, len(styles_dict[style])) for style in styles_dict]
         for style, pics in styles_dict.items():
             df = info_df.loc[info_df['款号'] == style, cols]
-            style, size, pcs_box = df.values[0]
-            ImagePiecer(style_name=style, style_sizes=size, pcs_box=pcs_box, pics=pics,
-                        enhance_level=enhance_level, output=output_path)
+            if df.empty:
+                print(f'{style}不存在于excel内，请检查！！！！\n\n\n\n')
+            else:
+                style, size, pcs_box = df.values[0]
+                ImagePiecer(style_name=style, style_sizes=size, pcs_box=pcs_box, pics=pics,
+                            enhance_level=enhance_level, output=output_path)
