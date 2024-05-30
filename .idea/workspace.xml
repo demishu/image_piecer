@@ -4,19 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1c0c53ac-c6db-4f49-b29d-58ba395dba28" name="变更" comment="first_commit">
-      <change beforePath="$PROJECT_DIR$/../.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/dbnavigator.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/wdir.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitattributes" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../matting/.gitattributes" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../matting/GUI.py" beforeDir="false" afterPath="$PROJECT_DIR$/../matting/GUI.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../matting/need/GUI_UI.py" beforeDir="false" afterPath="$PROJECT_DIR$/../matting/need/GUI_UI.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../matting/need/matting.py" beforeDir="false" afterPath="$PROJECT_DIR$/../matting/need/matting.py" afterDir="false" />
+    <list default="true" id="1c0c53ac-c6db-4f49-b29d-58ba395dba28" name="变更" comment="a uncompleted GUI">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GUI.py" beforeDir="false" afterPath="$PROJECT_DIR$/GUI.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GUI.ui" beforeDir="false" afterPath="$PROJECT_DIR$/GUI.ui" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_piecer/ImagePiecer.py" beforeDir="false" afterPath="$PROJECT_DIR$/image_piecer/ImagePiecer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/image_piecer/color_translation.py" beforeDir="false" afterPath="$PROJECT_DIR$/image_piecer/color_translation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,19 +32,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "D:/wdir/ImagePiecer/main.py",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/wdir/ImagePiecer/main.py&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\wdir\image_piecer" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\wdir\image_piecer" />
+      <recent name="D:\wdir\image_piecer\image_piecer\scripts" />
     </key>
   </component>
   <component name="RunManager">
@@ -93,7 +91,14 @@
       <option name="project" value="LOCAL" />
       <updated>1699004143367</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="a uncompleted GUI">
+      <created>1699113331199</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1699113331199</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -109,6 +114,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="first_commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="first_commit" />
+    <MESSAGE value="a uncompleted GUI" />
+    <option name="LAST_COMMIT_MESSAGE" value="a uncompleted GUI" />
   </component>
 </project>

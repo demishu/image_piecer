@@ -4,9 +4,36 @@ from collections.abc import Iterable
 from pathlib import Path
 from .color_translation import colors_trans, rename_color
 from collections import OrderedDict
+import multiprocessing
+import re
+
+unregistered_colors = set()
 
 
-unpresent_colors = set()
+# for style, pics in styles_dict.items():
+#     df = info_df.loc[info_df['款号'] == style, cols]
+#     if df.empty:
+#         print(f'{style}不存在于excel内，请检查！！！！\n\n\n\n')
+#     else:
+#         style, size, pcs_box = df.values[0]
+#         ImagePiecer(style_name=style, style_sizes=size, pcs_box=pcs_box, pics=pics,
+#                     enhance_level=enhance_level, output=output_path)
+#
+
+
+def process_job(info_df, cols, enhance_level, output_path):
+    def work(style, pics):
+        print(f'开始处理{style}')
+        df = info_df.loc[info_df['款号'] == style, cols]
+        if df.empty:
+            print(f'{style}不存在于excel内，请检查！！！！\n\n\n\n')
+        else:
+            style, size, pcs_box = df.values[0]
+            ImagePiecer(style_name=style, style_sizes=size, pcs_box=pcs_box, pics=pics,
+                        enhance_level=enhance_level, output=output_path)
+
+    return work
+
 
 class ImagePiecer:
     """piece style's pics in a Huger Pic"""
@@ -35,18 +62,23 @@ class ImagePiecer:
         self._output_path.mkdir(exist_ok=True)
         self._initialize_pics()
         self._piece()
-        if unpresent_colors:
+        if unregistered_colors:
             print('存在字典没有的颜色，请检查。')
-            print(unpresent_colors)
+            print(unregistered_colors)
+
+    @property
+    def output_path(self):
+        return Path(self._output_path)
+
     @staticmethod
     def _get_color_from_stem(stem):
-        stem = stem.replace('加单', "").replace("D", "").replace("A", "")
+        stem = stem.replace('加单', "").replace("款式", "")
         if " " in stem:
             stem = stem.split(" ")[-1]
         else:
             print(f"stem is illegal!!!!!!!!!!\n{stem}\n\n\n\n\n\n")
-        stem = rename_color(stem)
-        return stem
+        color = rename_color(stem)
+        return color
 
     def _initialize_pics(self):
         od = OrderedDict([(self._get_color_from_stem(path.stem), path) for path in self._pics_path])
@@ -57,8 +89,8 @@ class ImagePiecer:
 
         set_all_pics = set(self._pics_path)
         set_present_pics = set(pics_path)
-        global unpresent_colors
-        unpresent_colors.update(set_all_pics - set_present_pics)
+        global unregistered_colors
+        unregistered_colors.update(set_all_pics - set_present_pics)
 
         self._pics_path = pics_path
         for pic_path in self._pics_path:
@@ -115,6 +147,7 @@ class ImagePiecer:
         img = self._add_text(img, color_text_on_pic, (100, 100), (0, 0, 0), 70)
         self._pics.append(img)
 
+
     def _add_style_info(self, img: Image) -> Image:
         text = f"""
 款号/ARTICOLO:{self._style_name}      尺码/TAGLIE:{self._style_sizes}       件数/箱 / PZ/BOX:{self._pcs_box}"""
@@ -138,7 +171,7 @@ class ImagePiecer:
         pic_height = 1600
         pic_width = 1600
         save_quality = 50
-        pieced_pic_width = min(3500, pic_width * col) if tot_pcs < 3 else pic_width * col
+        pieced_pic_width = max(4000, pic_width * col) if tot_pcs < 5 else pic_width * col
         pieced_pic = Image.new('RGB', (pieced_pic_width, pic_height * row), color=(255, 255, 255))
         print(f'行数={col},\n列数={row}.\n图片数量={tot_pcs}')
         for i in range(row):
@@ -164,12 +197,18 @@ class ImagePiecer:
         input_pics_path = Path(path)
         pics = list(input_pics_path.glob('**/*.jpg')) + list(input_pics_path.glob('**/*.jpeg'))\
                + list(input_pics_path.glob('**/*.png'))
-        pics = [(pic.stem.split(' ')[0].replace('加单', ''), pic) for pic in pics]
+        pattern = re.compile(r'(\d+)')
+        tmp_pics = []
+        for pic in pics:
+            m = re.search(pattern, pic.stem)
+            style = m.group(1).replace('加单', '').replace('款号', "")
+            tmp_pics.append((style, pic))
+        pics = tmp_pics
         styles_dict = {styles: set() for styles, _ in pics}
         for styles, pic in pics:
             styles_dict[styles].add(pic)
         return styles_dict
-    
+
     @staticmethod
     def run(input_pics_path: Path, info_df: pd.DataFrame, enhance_level=2, output_path=None):
         cols = ['款号', '尺码', '件数/箱']
@@ -184,6 +223,22 @@ class ImagePiecer:
             raise Exception(f"plz input dataframe!!!")
 
         styles_dict = ImagePiecer.group_pics(input_pics_path)
+        #
+        # cpu_count = multiprocessing.cpu_count() - 2
+        #
+        # def work(style, pics):
+        #     print(f'开始处理{style}')
+        #     df = info_df.loc[info_df['款号'] == style, cols]
+        #     if df.empty:
+        #         print(f'{style}不存在于excel内，请检查！！！！\n\n\n\n')
+        #     else:
+        #         style, size, pcs_box = df.values[0]
+        #         ImagePiecer(style_name=style, style_sizes=size, pcs_box=pcs_box, pics=pics,
+        #                     enhance_level=enhance_level, output=output_path)
+        #
+        # with multiprocessing.Pool(cpu_count) as pool:
+        #     pool.starmap(work, styles_dict.items())
+
         for style, pics in styles_dict.items():
             df = info_df.loc[info_df['款号'] == style, cols]
             if df.empty:
@@ -192,3 +247,4 @@ class ImagePiecer:
                 style, size, pcs_box = df.values[0]
                 ImagePiecer(style_name=style, style_sizes=size, pcs_box=pcs_box, pics=pics,
                             enhance_level=enhance_level, output=output_path)
+
